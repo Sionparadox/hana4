@@ -6,3 +6,4 @@
 *aaa
 -abc *fa*f
 -bbb
+- ccccc
