@@ -4,14 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First HTML PAGE</title>
+    <style>
+        ul {
+            list-style: none;
+        }
+        ul.checkgroup label{
+            cursor:pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>Header</h1>
         </header>
+
+        <form action="a.html">
+            <fieldset>
+                <legend>Select</legend>
+                <select name="sel" id="sel">
+                    <option value="111">111x</option>
+                    <option value="222">222x</option>
+                    <option value="333">333x</option>
+                </select>
+
+                <input type="text" id="captain" list="member">
+                <datalist id="member">
+                    <option value="111">111x</option>
+                    <option value="222">222x</option>
+                    <option value="333">333x</option>
+                </datalist>
+
+                <input type="search">
+                <input type="number">
+                <label><progress value="50" max="100"></progress>
+                <meter value="0.6" min="0.2" max="0.9" optimun="0.8"></meter>
+
+            </fieldset>
+            <fieldset>
+                <legend>CheckBox</legend>
+                <ul class="checkgroup">
+                    <li><label>
+                        <input type="checkbox" value="blue">Blue Team
+                    </label></li>
+                    <li><label>
+                        <input type="checkbox" value="red">Red Team
+                    </label></li>
+                </ul>
+            </fieldset>
+
+            <fieldset>
+                <legend>radio</legend>
+                <ul>
+                    <li><label>
+                        <input type="radio" name="team">Blue
+                    </label></li>
+                    <li><label>
+                        <input type="radio" name="team">Red
+                    </label></li>
+                </ul>
+            </fieldset>
+
+        </form>
+
+        <section>
+            <figure>
+                <figcaption><H2>FigCaption</figcaption>
+                <table border="1">
+                    <CAPTION>CAPTION</CAPTION>
+                    <colgroup>
+                    <col />
+                    <col span="2"
+                    style="background-color:yellow;" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>aaa</th>
+                            <th>bbb</th>
+                            <th>ccc</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color:red;">111</td>
+                            <td>
+                                <a href="a.html" target="_blank">a.html</a>
+                            </td>
+                            <td>113</td>
+                        </tr>
+                        <tr>
+                            <td>221</td>
+                            <td>222</td>
+                            <td>223</td>
+                        </tr>
+                        <tr>
+                            <td>331</td>
+                            <td>332</td>
+                            <td>333</td>
+                        </tr>
+                    </tbody>
+                </table>   
+            </figure>
+        </section>
+
         <section data-id="1">
-            <h2>Section1</h2>
+            <h2>Section</h2>
             <form action="a.html">
                 <label for="email">Email: </label>
                 <input type="email" id="email">
