@@ -5,3 +5,7 @@
 .resist-form input {
     text-align:center;
 }
+
+form .form-floating{
+    margin-bottom: 1rem
+}
