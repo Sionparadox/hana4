@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer base{
-    button {
-        
+    input.inp {
+        @apply px-2 py-1 w-full border rounded-md focus:outline-none focus:ring-0 focus:border-blue-500
     }
 }
 
