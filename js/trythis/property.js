@@ -47,7 +47,7 @@ console.log("makeArrayFromObject: ", makeArrayFromObject(after));
 
 console.log("-------------------------");
 function shallowCopyObject(obj) {
-  ret = {};
+  const ret = {};
   for (let k in obj) {
     ret[k] = obj[k];
   }
@@ -55,7 +55,7 @@ function shallowCopyObject(obj) {
 }
 
 // function copyObject(obj) {
-//   ret = {};
+//   const ret = {};
 //   for (let k in obj) {
 //     if (obj && typeof obj[k] === "object") {
 //       let newObj = copyObject(obj[k]);
@@ -80,7 +80,6 @@ function copyObject(obj) {
 
 const kim = { nid: 3, nm: "Kim", addr: { city: "Pusan" } };
 const newKim = copyObject(kim);
-console.log("newKim : ", newKim);
 newKim.addr.city = "Daegu";
 console.log(kim.addr.city !== newKim.addr.city);
 
