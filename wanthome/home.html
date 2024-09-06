@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go HOME</title>
+  </head>
+  <body>
+    <div
+      style="margin: auto; margin-top: 100px; padding : 15px; border: 3px solid black; width : 1000px; height : 600px; font-size : 30px;"
+      id="btnHome"
+    ></div>
+    <div style=" margin: auto; margin-top : 1rem;">
+        <label> 메세지 <input type="text" id="iptMessage"/>
+        <button id="inputBtn">입력</button>
+        <button id="clearBtn">초기화!</button>
+    </div>
+
+    <script>
+        const homeId = document.getElementById('btnHome');
+        let isPrinting = false;
+        let cnt = 0
+        function addMessage(msg){
+            const inputMessage = document.getElementById('iptMessage').value;
+            const myMessage = inputMessage ?? "졸리다";
+            if(isPrinting) homeId.innerText =  msg + myMessage + " ";
+        }
+
+        const wantHome = setInterval(()=>{
+            cnt += 1;
+            if(cnt === 100){
+                cnt = 0
+                homeId.innerText = "";
+            }
+            addMessage(homeId.innerText)}, 100);
+        window.addEventListener('load', ()=>{
+          homeId.addEventListener('click', ()=>{
+            isPrinting = !isPrinting;
+            if(!cnt) cnt = 0
+            //clearInterval(wantHome)
+          });
+      });
+      const iptBtn = document.getElementById('inputBtn');
+      iptBtn.addEventListener('click', () => {
+        isPrinting = true;
+        
+      })
+      const clrBtn = document.getElementById('clearBtn');
+      clrBtn.addEventListener('click', ()=>{
+        isPrinting = false;
+        cnt = 0
+        homeId.innerText = "";
+      })
+    </script>
+  </body>
+</html>

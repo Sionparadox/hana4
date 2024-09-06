@@ -1,20 +1,21 @@
-// a100 = Array.from({ length: 100 }, (_, i) => i + 1);
-// //console.log(a100);
+// const regexp = /senior|coding/gi;
+// if (regexp.test('JS Coding')) console.log('OK3');
+// console.log(regexp.lastIndex);
+// if (regexp.test('Junior Developer')) console.log('OK1');
+// console.log(regexp.lastIndex);
+// if (regexp.test('Senior Developer')) console.log('OK2');
+// console.log(regexp.lastIndex);
+// if (regexp.test('JavaScript Coding')) console.log('OK4');
+// console.log(regexp.lastIndex);
 
-// function Range(a, n) {
-//   ret = Array.from({ length: n - 1 }, (_, i) => i + a);
-//   return ret;
-// }
+const temp1 = [];
+const temp2 = [];
+for (let i = '가'.charCodeAt(); i <= '하'.charCodeAt(); i += 588) {
+  temp1.push(i);
+}
+for (let i = 'ㄱ'.charCodeAt(); i <= 'ㅎ'.charCodeAt(); i += 1) {
+  temp2.push(String.fromCharCode(i));
+}
 
-//console.log(Range(1, 3));
-//console.log(Range(5, 20));
-
-// arr = Array.from({ length: 5 }, (_, i) => i + 1);
-// const sum = arr.reduce((s, a) => (s += a));
-// console.log(sum);
-
-// arr.reduce((s, a) => (s += a), 0);
-
-const objs = [{ id: 1 }, { name: 'Hong' }, { addr: 'Seoul', id: 5 }];
-ans = objs.reduce((acc, o) => ({ ...acc, ...o }));
-console.log(ans);
+console.log(temp1);
+console.log(temp2);
