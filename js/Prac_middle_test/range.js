@@ -7,7 +7,7 @@ const range = (start, end, step = start > end ? -1 : 1) => {
 
   //   if (end === undefined) {
   //     if (start > 0) {
-  //       end = start;
+  //       end = start;x
   //       start = 1;
   //     } else if (start < 0) {
   //       end = -1;
