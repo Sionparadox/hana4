@@ -1,12 +1,7 @@
 import { useState } from 'react';
-
-import './App.css';
 import Hello from './components/Hello';
 import My from './components/My';
 
-export type LoginUser = typeof SampleSession.loginUser;
-export type CartItem = typeof SampleSession.cart;
-export type Session = { loginUser: LoginUser | null; cart: CartItem | [] };
 const SampleSession = {
   loginUser: { id: 1, name: 'Hong' },
   cart: [
@@ -16,35 +11,66 @@ const SampleSession = {
   ],
 };
 
+type LoginUser = typeof SampleSession.loginUser;
+type CartItem = { id: number; name: string; price: number };
+export type Session = { loginUser: LoginUser | null; cart: CartItem[] };
+
 function App() {
   const [count, setCount] = useState(0);
+  const [session, setSession] = useState<Session>(SampleSession);
+
   const plusCount = () => setCount(count + 1);
   const minusCount = () => setCount(count - 1);
 
-  const [session, setSession] = useState<Session>(SampleSession);
-
   const logout = () => setSession({ ...session, loginUser: null });
-  const login = (user: LoginUser) =>
-    setSession({ ...session, loginUser: user });
+
+  const removeCartItem = (itemId: number) =>
+    setSession({
+      ...session,
+      cart: session.cart.filter(({ id }) => id != itemId),
+    });
+  // const logout = () => {
+  //   session.loginUser = null;
+  //   setSession(session);
+  // };
+  const login = (id: number, name: string) =>
+    setSession({
+      ...session,
+      loginUser: { id, name },
+    });
+
+  // console.log('Apppppp');
+
   return (
-    <>
-      <div>
-        <Hello
-          name='박시온'
-          age={26}
-          cnt={count}
-          plusCount={plusCount}
-          minusCount={minusCount}
-        />
-      </div>
+    <div className='mt-5 flex flex-col items-center'>
+      <Hello
+        name='홍길동'
+        age={33}
+        count={count}
+        plusCount={plusCount}
+        minusCount={minusCount}
+      />
       <hr />
-      <My session={session} logout={logout} login={login} />
+      <pre>{JSON.stringify(session.loginUser)}</pre>
+      <My
+        session={session}
+        logout={logout}
+        login={login}
+        removeCartItem={removeCartItem}
+      />
       <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button
+          onClick={() => {
+            setCount((count) => count + 1);
+            if (session.loginUser) session.loginUser.name = 'XXX' + count;
+            console.table(session.loginUser);
+          }}
+          className='btn'
+        >
+          App.count is {count}
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

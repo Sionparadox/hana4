@@ -1,14 +1,20 @@
-import { LoginUser } from '../App.tsx';
+import { Session } from '../App';
+import Button from './atoms/Button';
 
 type Props = {
-  loginUser: LoginUser;
+  session: Session;
   logout: () => void;
 };
-export default function Profile({ loginUser, logout }: Props) {
+
+export default function Profile({ session, logout }: Props) {
   return (
-    <>
-      <h3>{loginUser.name} Logined</h3>
-      <button onClick={logout}>SignOut</button>
-    </>
+    <div>
+      <h3>{session.loginUser?.name} Logined</h3>
+      <button onClick={logout} className='btn btn-primary'>
+        Sign Out
+      </button>
+
+      <Button onClick={logout} text='SignOut' />
+    </div>
   );
 }

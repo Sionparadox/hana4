@@ -1,31 +1,42 @@
-import { LoginUser } from '../App.tsx';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import Button from './atoms/Button';
+import LabelInput from './molecules/LabelInput';
 
-type Props = {
-  login: (user: LoginUser) => void;
-};
-export default function Login({ login }: Props) {
-  let new_id: number;
-  let new_name: string;
-  const loginNow = () => {
-    if (new_id && new_name) login({ id: new_id, name: new_name });
+export default function Login({
+  login,
+}: {
+  login: (id: number, name: string) => void;
+}) {
+  const [id, setId] = useState(0);
+  const [name, setName] = useState('');
+
+  const signIn = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!id || !name) {
+      alert('Input the id & name!!');
+      return;
+    }
+    login(id, name);
+  };
+
+  const changeName = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.currentTarget.value);
   };
   return (
     <>
-      <h3>Sign In</h3>
-      <form>
-        <label>LoginId</label>
-        <input
-          id='loginId'
+      <form onSubmit={signIn} className='border p-4'>
+        <LabelInput
+          label='ID'
           type='number'
-          onChange={(e) => (new_id = Number(e.currentTarget.value))}
-        ></input>
-        <label>LoginName</label>
-        <input
-          id='loginName'
-          type='text'
-          onChange={(e) => (new_name = e.currentTarget.value)}
-        ></input>
-        <button onClick={loginNow}>SignIn</button>
+          onChange={(e) => setId(+e.currentTarget.value)}
+        />
+        <LabelInput label='Name' type='text' onChange={changeName} />
+        <Button
+          text='Sign In'
+          variant='btn-success'
+          classNames='float-end mt-3'
+        />
       </form>
     </>
   );
