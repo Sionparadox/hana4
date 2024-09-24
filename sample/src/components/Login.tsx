@@ -92,12 +92,9 @@ export default function Login({
         />
       </div> */}
         {/* <button className='btn btn-success float-end mt-3'>Sign In</button> */}
-        <Button
-          text='Sign In'
-          type='submit'
-          variant='btn-success'
-          classNames='float-end mt-3'
-        />
+        <Button type='submit' variant='btn-success' classNames='float-end mt-3'>
+          Sign In
+        </Button>
       </form>
     </>
   );

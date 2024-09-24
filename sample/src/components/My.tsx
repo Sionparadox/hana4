@@ -1,24 +1,33 @@
-import { FaTrashCan } from 'react-icons/fa6';
+import { FaPlus, FaTrashCan } from 'react-icons/fa6';
 import { Session } from '../App.tsx';
 import Login from './Login.tsx';
 import Profile from './Profile.tsx';
 import Button from './atoms/Button.tsx';
 import { FormEvent, useRef, useState } from 'react';
+import { FaRedo, FaSave } from 'react-icons/fa';
 
 type Props = {
   session: Session;
   logout: () => void;
   login: (id: number, name: string) => void;
   removeCartItem: (id: number) => void;
+  addCartItem: (name: string, price: number) => void;
 };
 
-export default function My({ session, logout, login, removeCartItem }: Props) {
+export default function My({
+  session,
+  logout,
+  login,
+  removeCartItem,
+  addCartItem,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const logoutButtonRef = useRef<HTMLButtonElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
 
   const toggleEditing = () => setIsEditing((pre) => !pre);
+
   const removeItem = (id: number) => {
     if (confirm('Are u sure?')) {
       removeCartItem(id);
@@ -29,7 +38,17 @@ export default function My({ session, logout, login, removeCartItem }: Props) {
     e.preventDefault();
     const name = nameRef.current?.value;
     const price = priceRef.current?.value;
-    console.log(name, price);
+    if (!name) {
+      alert('이름을 입력하세요!');
+      return nameRef.current?.focus();
+    } else if (!price) {
+      alert('가격을 입력하세요!');
+      return priceRef.current?.focus();
+    }
+    addCartItem(name, +price);
+    nameRef.current.value = '';
+    priceRef.current.value = '';
+    nameRef.current.focus();
   };
 
   return (
@@ -37,10 +56,9 @@ export default function My({ session, logout, login, removeCartItem }: Props) {
       {session.loginUser ? (
         <>
           <Profile session={session} logout={logout} ref={logoutButtonRef} />
-          <Button
-            onClick={() => logoutButtonRef.current?.focus()}
-            text='MySignOut'
-          />
+          <Button onClick={() => logoutButtonRef.current?.focus()}>
+            MySignOut{' '}
+          </Button>
         </>
       ) : (
         <Login login={login} />
@@ -82,11 +100,17 @@ export default function My({ session, logout, login, removeCartItem }: Props) {
                 placeholder='price..'
                 className='inp'
               ></input>
-              <Button type='reset' onClick={toggleEditing} text='Cancel' />
-              <Button type='submit' text='save' variant='btn-primary' />
+              <Button type='reset' onClick={toggleEditing}>
+                <FaRedo />
+              </Button>
+              <Button type='submit' variant='btn-primary'>
+                <FaSave />
+              </Button>
             </form>
           ) : (
-            <Button onClick={toggleEditing} text='+Add Item' />
+            <Button onClick={toggleEditing}>
+              <FaPlus />
+            </Button>
           )}
         </li>
       </ul>
