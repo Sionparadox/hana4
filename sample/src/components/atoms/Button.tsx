@@ -13,7 +13,7 @@ export default function Button({
   ...props
 }: Props) {
   return (
-    <button {...props} className={`btn ${variant} ${classNames}`}>
+    <button {...props} className={`btn ${variant} ${classNames} normal-case`}>
       {text}
     </button>
   );

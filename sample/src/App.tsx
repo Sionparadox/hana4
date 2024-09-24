@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import Hello from './components/Hello';
+import { useRef, useState } from 'react';
+import Hello, { MyHandler } from './components/Hello';
 import My from './components/My';
+import { flushSync } from 'react-dom';
 
 const SampleSession = {
   loginUser: { id: 1, name: 'Hong' },
@@ -19,16 +20,22 @@ function App() {
   const [count, setCount] = useState(0);
   const [session, setSession] = useState<Session>(SampleSession);
 
-  const plusCount = () => setCount(count + 1);
+  const myHandleRef = useRef<MyHandler>(null);
+
+  const plusCount = () => {
+    // setCount((pre) => pre + 1);
+    setCount((pre) => {
+      const newer = pre + 1;
+      // 여기서 변경된 newer(count)를 사용해야 함!
+      return newer;
+    });
+    flushSync(() => setCount((c) => c + 1));
+    // setOtherState... ver18.2
+    console.log('🚀  count:', count, document.getElementById('cnt')?.innerText);
+  };
   const minusCount = () => setCount(count - 1);
 
   const logout = () => setSession({ ...session, loginUser: null });
-
-  const removeCartItem = (itemId: number) =>
-    setSession({
-      ...session,
-      cart: session.cart.filter(({ id }) => id != itemId),
-    });
   // const logout = () => {
   //   session.loginUser = null;
   //   setSession(session);
@@ -41,6 +48,18 @@ function App() {
 
   // console.log('Apppppp');
 
+  const removeCartItem = (toRemoveId: number) => {
+    // patten 1)
+    // session.cart = session.cart.filter(({ id }) => id !== toRemoveId);
+    // setSession({ ...session });
+
+    // patten 2)
+    setSession({
+      ...session,
+      cart: session.cart.filter(({ id }) => id !== toRemoveId),
+    });
+  };
+
   return (
     <div className='mt-5 flex flex-col items-center'>
       <Hello
@@ -49,6 +68,7 @@ function App() {
         count={count}
         plusCount={plusCount}
         minusCount={minusCount}
+        ref={myHandleRef}
       />
       <hr />
       <pre>{JSON.stringify(session.loginUser)}</pre>
@@ -64,6 +84,7 @@ function App() {
             setCount((count) => count + 1);
             if (session.loginUser) session.loginUser.name = 'XXX' + count;
             console.table(session.loginUser);
+            myHandleRef.current?.jumpHelloState();
           }}
           className='btn'
         >

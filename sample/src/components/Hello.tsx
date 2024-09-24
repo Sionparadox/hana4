@@ -1,4 +1,10 @@
-import { ReactNode, useState } from 'react';
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactNode,
+  useImperativeHandle,
+  useState,
+} from 'react';
 
 type TitleProps = {
   text: string;
@@ -46,23 +52,30 @@ type Props = {
   minusCount: () => void;
 };
 
-export default function Hello({
-  name,
-  age,
-  count,
-  plusCount,
-  minusCount,
-}: Props) {
+export type MyHandler = {
+  jumpHelloState: () => void;
+};
+
+function Hello(
+  { name, age, count, plusCount, minusCount }: Props,
+  ref: ForwardedRef<MyHandler>
+) {
   // const [myState, setMyState] = useState(() => new Date().getTime());
   const [myState, setMyState] = useState(0);
   let v = 1;
   // console.debug('********', v, myState, count);
 
+  const handler: MyHandler = {
+    jumpHelloState: () => setMyState((pre) => pre * 10),
+  };
+  useImperativeHandle(ref, () => handler);
+
   return (
     <div className='my-5 border border-slate-300 p-3'>
       <Title text='Hello~' name={name} />
       <Body>
-        This is Hello Body Component. {v} - {myState} - {age}
+        <h3 className='text-center text-2xl'>myState: {myState}</h3>
+        This is Hello Body Component. {v} - {age}
       </Body>
       <button
         onClick={() => {
@@ -73,7 +86,7 @@ export default function Hello({
         }}
         className='btn'
       >
-        Hello
+        Hello(+)
       </button>
       <strong id='cnt' className='mx-5'>
         {count}
@@ -84,3 +97,7 @@ export default function Hello({
     </div>
   );
 }
+
+const ImpHello = forwardRef(Hello);
+
+export default ImpHello;
