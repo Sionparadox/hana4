@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import Hello, { MyHandler } from './components/Hello';
 import My from './components/My';
 import { flushSync } from 'react-dom';
+import { type LoginHandler } from './components/Login';
 
 const SampleSession = {
   loginUser: { id: 1, name: 'Hong' },
@@ -23,28 +24,33 @@ function App() {
   const myHandleRef = useRef<MyHandler>(null);
 
   const plusCount = () => {
-    // setCount((pre) => pre + 1);
     setCount((pre) => {
       const newer = pre + 1;
-      // 여기서 변경된 newer(count)를 사용해야 함!
       return newer;
     });
     flushSync(() => setCount((c) => c + 1));
-    // setOtherState... ver18.2
     console.log('🚀  count:', count, document.getElementById('cnt')?.innerText);
   };
   const minusCount = () => setCount(count - 1);
 
   const logout = () => setSession({ ...session, loginUser: null });
-  // const logout = () => {
-  //   session.loginUser = null;
-  //   setSession(session);
-  // };
-  const login = (id: number, name: string) =>
+
+  const loginRef = useRef<LoginHandler>(null);
+
+  const login = (id: number, name: string) => {
+    if (!id) {
+      alert('ID를 입력하세요!');
+      return loginRef.current?.focus('id');
+    }
+    if (!name) {
+      alert('이름를 입력하세요!');
+      return loginRef.current?.focus('name');
+    }
     setSession({
       ...session,
       loginUser: { id, name },
     });
+  };
 
   // console.log('Apppppp');
 
@@ -82,6 +88,7 @@ function App() {
         login={login}
         removeCartItem={removeCartItem}
         addCartItem={addCartItem}
+        ref={loginRef}
       />
       <div className='card'>
         <button
