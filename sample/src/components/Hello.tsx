@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useState,
 } from 'react';
+import { useCounter } from '../hooks/counter-hook';
 
 type TitleProps = {
   text: string;
@@ -29,41 +30,19 @@ const Body = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// function useState<S>(initValueOrFn) {
-//   const state = {
-//     _state: initValueOrFn,
-//     get state() {
-//       return this._state;
-//     },
-//     setState(x: S) {
-//       this._state = x;
-//       vdom.trigger(this);
-//     }
-//   }
-
-//   return [state.state, state.setState];
-// }
-
 type Props = {
   name: string;
   age: number;
-  count: number;
-  plusCount: () => void;
-  minusCount: () => void;
 };
 
 export type MyHandler = {
   jumpHelloState: () => void;
 };
 
-function Hello(
-  { name, age, count, plusCount, minusCount }: Props,
-  ref: ForwardedRef<MyHandler>
-) {
-  // const [myState, setMyState] = useState(() => new Date().getTime());
+function Hello({ name, age }: Props, ref: ForwardedRef<MyHandler>) {
+  const { count, plusCount, minusCount } = useCounter();
   const [myState, setMyState] = useState(0);
   let v = 1;
-  // console.debug('********', v, myState, count);
 
   const handler: MyHandler = {
     jumpHelloState: () => setMyState((pre) => pre * 10),

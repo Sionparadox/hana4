@@ -1,6 +1,6 @@
-import { FaPlus, FaTrashCan } from 'react-icons/fa6';
+import { FaTrashCan } from 'react-icons/fa6';
 import { Session } from '../App.tsx';
-import Login, { LoginHandler } from './Login.tsx';
+import Login, { type LoginHandler } from './Login.tsx';
 import Profile from './Profile.tsx';
 import Button from './atoms/Button.tsx';
 import { FormEvent, ForwardedRef, forwardRef, useRef, useState } from 'react';
@@ -35,13 +35,15 @@ export default forwardRef(function My(
     e.preventDefault();
     const name = nameRef.current?.value;
     const price = priceRef.current?.value;
+    // console.log('🚀  name/price:', name, price);
     if (!name) {
-      alert('이름을 입력하세요!');
+      alert('상품명을 입력하세요!');
       return nameRef.current?.focus();
     } else if (!price) {
-      alert('가격을 입력하세요!');
+      alert('금액을 입력하세요!');
       return priceRef.current?.focus();
     }
+
     addCartItem(name, +price);
     nameRef.current.value = '';
     priceRef.current.value = '';
@@ -51,23 +53,23 @@ export default forwardRef(function My(
   return (
     <>
       {session.loginUser ? (
-        <>
+        <div className='flex gap-5'>
           <Profile session={session} logout={logout} ref={logoutButtonRef} />
           <Button onClick={() => logoutButtonRef.current?.focus()}>
-            MySignOut{' '}
+            MySignOut
           </Button>
-        </>
+        </div>
       ) : (
         <Login login={login} ref={ref} />
       )}
 
-      <ul className='my-3 w-1/2 border p-3'>
+      <ul className='my-3 w-2/3 border p-3'>
         {session.cart?.length ? (
           session.cart.map(({ id, name, price }) => (
             <li key={id} className='flex justify-between'>
               <strong>
                 {id}. {name}
-                <small className='font-light text-gray-500'>
+                <small className='ml-2 font-light text-gray-500'>
                   {price.toLocaleString()}원
                 </small>
               </strong>
@@ -90,13 +92,13 @@ export default forwardRef(function My(
                 type='text'
                 placeholder='name..'
                 className='inp'
-              ></input>
+              />
               <input
                 ref={priceRef}
                 type='number'
                 placeholder='price..'
                 className='inp'
-              ></input>
+              />
               <Button type='reset' onClick={toggleEditing}>
                 <FaRedo />
               </Button>
@@ -105,9 +107,7 @@ export default forwardRef(function My(
               </Button>
             </form>
           ) : (
-            <Button onClick={toggleEditing}>
-              <FaPlus />
-            </Button>
+            <Button onClick={toggleEditing}>+ Add Item</Button>
           )}
         </li>
       </ul>

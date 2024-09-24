@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import Hello, { MyHandler } from './components/Hello';
 import My from './components/My';
-import { flushSync } from 'react-dom';
 import { type LoginHandler } from './components/Login';
+import { useCounter } from './hooks/counter-hook';
 
 const SampleSession = {
   loginUser: { id: 1, name: 'Hong' },
@@ -18,20 +18,10 @@ type CartItem = { id: number; name: string; price: number };
 export type Session = { loginUser: LoginUser | null; cart: CartItem[] };
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { count, plusCount } = useCounter();
   const [session, setSession] = useState<Session>(SampleSession);
 
   const myHandleRef = useRef<MyHandler>(null);
-
-  const plusCount = () => {
-    setCount((pre) => {
-      const newer = pre + 1;
-      return newer;
-    });
-    flushSync(() => setCount((c) => c + 1));
-    console.log('🚀  count:', count, document.getElementById('cnt')?.innerText);
-  };
-  const minusCount = () => setCount(count - 1);
 
   const logout = () => setSession({ ...session, loginUser: null });
 
@@ -73,14 +63,7 @@ function App() {
 
   return (
     <div className='mt-5 flex flex-col items-center'>
-      <Hello
-        name='홍길동'
-        age={33}
-        count={count}
-        plusCount={plusCount}
-        minusCount={minusCount}
-        ref={myHandleRef}
-      />
+      <Hello name='홍길동' age={33} ref={myHandleRef} />
       <hr />
       <My
         session={session}
@@ -93,7 +76,7 @@ function App() {
       <div className='card'>
         <button
           onClick={() => {
-            setCount((count) => count + 1);
+            plusCount();
             if (session.loginUser) session.loginUser.name = 'XXX' + count;
             console.table(session.loginUser);
             myHandleRef.current?.jumpHelloState();
