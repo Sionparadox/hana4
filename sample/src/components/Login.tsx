@@ -1,25 +1,14 @@
-import {
-  FormEvent,
-  ForwardedRef,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from 'react';
+import { FormEvent, useImperativeHandle, useRef } from 'react';
 import Button from './atoms/Button';
 import LabelInput from './molecules/LabelInput';
+import { useSession } from '../hooks/session-context';
 
 export type LoginHandler = {
   focus: (prop: string) => void;
 };
 
-export default forwardRef(function Login(
-  {
-    login,
-  }: {
-    login: (id: number, name: string) => void;
-  },
-  ref: ForwardedRef<LoginHandler>
-) {
+export default function Login() {
+  const { login, loginRef } = useSession();
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -30,7 +19,7 @@ export default forwardRef(function Login(
     },
   };
 
-  useImperativeHandle(ref, () => handler);
+  useImperativeHandle(loginRef, () => handler);
 
   const signIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,12 +31,7 @@ export default forwardRef(function Login(
   return (
     <>
       <form onSubmit={signIn} className='border p-4'>
-        <LabelInput
-          label='ID'
-          type='number'
-          ref={idRef}
-          // onChange={(e) => setId(+e.currentTarget.value)}
-        />
+        <LabelInput label='ID' type='number' ref={idRef} />
         <div className='flex'>
           <label htmlFor='name' className='w-24'>
             Name:
@@ -68,4 +52,4 @@ export default forwardRef(function Login(
       </form>
     </>
   );
-});
+}

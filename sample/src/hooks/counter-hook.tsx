@@ -1,16 +1,13 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
 
-type CounterContextProps = {
-  count: number;
-  plusCount: () => void;
-  minusCount: () => void;
-};
-
-const CounterContext = createContext<CounterContextProps>({
+const contextInitValue = {
   count: 0,
   plusCount: () => {},
   minusCount: () => {},
-});
+};
+type CounterContextProps = typeof contextInitValue;
+
+const CounterContext = createContext<CounterContextProps>(contextInitValue);
 export const CounterProvider = ({ children }: PropsWithChildren) => {
   const [count, setCount] = useState(0);
 
