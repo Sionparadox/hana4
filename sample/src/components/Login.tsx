@@ -1,7 +1,8 @@
-import { FormEvent, useImperativeHandle, useRef } from 'react';
+import { FormEvent, useEffect, useImperativeHandle, useRef } from 'react';
 import Button from './atoms/Button';
 import LabelInput from './molecules/LabelInput';
 import { useSession } from '../hooks/session-context';
+import { useCounter } from '../hooks/counter-hook';
 
 export type LoginHandler = {
   focus: (prop: string) => void;
@@ -9,6 +10,7 @@ export type LoginHandler = {
 
 export default function Login() {
   const { login, loginRef } = useSession();
+  const { plusCount, minusCount } = useCounter();
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -28,6 +30,12 @@ export default function Login() {
     login(+id, name);
   };
 
+  useEffect(() => {
+    plusCount();
+
+    return minusCount;
+  });
+
   return (
     <>
       <form onSubmit={signIn} className='border p-4'>
@@ -42,7 +50,6 @@ export default function Login() {
             ref={nameRef}
             placeholder='Name...'
             className='inp'
-            // onChange={changeName}
           />
         </div>
 

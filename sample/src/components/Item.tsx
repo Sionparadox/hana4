@@ -79,19 +79,17 @@ export default function Item({ item, toggleAdding }: Props) {
             ref={priceRef}
             type='number'
             onChange={checkDirty}
-            placeholder='price..'
             defaultValue={price}
+            placeholder='price..'
             className='inp'
           />
           <Button type='reset' onClick={toggleEditing}>
             <FaRedo />
           </Button>
           {hasDirty ? (
-            <div className='w-20'>
-              <Button type='submit' variant='btn-primary' className='m-0 p-0'>
-                <FaSave />
-              </Button>
-            </div>
+            <Button type='submit' variant='btn-primary' className='m-0 py-1'>
+              <FaSave />
+            </Button>
           ) : (
             <div className='w-20'></div>
           )}
