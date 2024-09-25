@@ -1,16 +1,15 @@
 import Profile from './Profile.tsx';
 import Button from './atoms/Button.tsx';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useSession } from '../hooks/session-context.tsx';
 import Login from './Login.tsx';
 import Item from './item.tsx';
+import useToggle from '../hooks/toggle.ts';
 
 export default function My() {
   const { session } = useSession();
   const logoutButtonRef = useRef<HTMLButtonElement>(null);
-  const [isAdding, setIsAdding] = useState(false);
-
-  const toggleAdding = () => setIsAdding((pre) => !pre);
+  const [isAdding, toggleAdding] = useToggle();
 
   return (
     <>
