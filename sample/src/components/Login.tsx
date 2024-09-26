@@ -3,7 +3,7 @@ import Button from './atoms/Button';
 import LabelInput from './molecules/LabelInput';
 import { useSession } from '../hooks/session-context';
 import { useCounter } from '../hooks/counter-hook';
-import { useTimeout } from '../hooks/timer-hooks';
+import { useInterval, useTimeout } from '../hooks/timer-hooks';
 
 export type LoginHandler = {
   focus: (prop: string) => void;
@@ -31,17 +31,16 @@ export default function Login() {
     login(+id, name);
   };
 
-  // useInterval(plusCount, 1500);
+  useInterval(plusCount, 1500);
   const f = () => {
     console.log('once!');
     nameRef.current?.focus();
   };
-  // const refF = useRef(f);
   useTimeout(f, 1000);
 
   useEffect(() => {
-    console.log('useEffect', count);
     plusCount();
+    console.log('useEffect', count);
     return minusCount;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

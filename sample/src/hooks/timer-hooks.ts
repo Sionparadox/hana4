@@ -1,15 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const useTimeout = <T extends (...args: Parameters<T>) => ReturnType<T>>(
   cb: T,
   delay: number,
-  ...args: unknown[]
+  ...args: Parameters<T>
 ) => {
+  const cbRef = useRef(cb);
+  const argsRef = useRef(args);
   useEffect(() => {
-    const timer = setTimeout(cb, delay, ...args);
+    const timer = setTimeout(cbRef.current, delay, ...argsRef.current);
 
     return () => clearTimeout(timer);
-  }, [cb, delay, args]);
+  }, [delay]);
 };
 
 export const useInterval = <
@@ -17,7 +19,7 @@ export const useInterval = <
 >(
   cb: T,
   delay: number,
-  ...args: unknown[]
+  ...args: Parameters<T>
 ) => {
   useEffect(() => {
     const timer = setInterval(cb, delay, ...args);
