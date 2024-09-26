@@ -1,9 +1,27 @@
 import { useEffect } from 'react';
 
-type CBT<T> = (...args: T[]) => void;
-export default function <T>(cb: CBT<T>, delay: number) {
+export const useTimeout = <T extends (...args: Parameters<T>) => ReturnType<T>>(
+  cb: T,
+  delay: number,
+  ...args: unknown[]
+) => {
   useEffect(() => {
-    const tmout = setTimeout(() => cb, delay);
-    return () => clearTimeout(tmout);
-  });
-}
+    const timer = setTimeout(cb, delay, ...args);
+
+    return () => clearTimeout(timer);
+  }, [cb, delay, args]);
+};
+
+export const useInterval = <
+  T extends (...args: Parameters<T>) => ReturnType<T>,
+>(
+  cb: T,
+  delay: number,
+  ...args: unknown[]
+) => {
+  useEffect(() => {
+    const timer = setInterval(cb, delay, ...args);
+
+    return () => clearInterval(timer);
+  }, [cb, delay, args]);
+};

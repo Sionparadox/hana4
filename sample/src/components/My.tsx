@@ -38,7 +38,7 @@ export default function My() {
           {isAdding ? (
             <Item
               item={{ id: 0, name: '', price: 0 }}
-              toggleAdding={toggleAdding}
+              toggleAdding={() => toggleAdding(true)}
             ></Item>
           ) : (
             <Button onClick={toggleAdding}>+ Add Item</Button>
