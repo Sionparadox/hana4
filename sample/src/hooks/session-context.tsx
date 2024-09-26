@@ -3,44 +3,65 @@ import {
   createRef,
   PropsWithChildren,
   useContext,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
 import { LoginHandler } from '../components/Login';
+import { useFetch } from './fetch-hooks';
+import useToggle from './toggle';
 
+// const SampleSession = {
+//   loginUser: { id: 1, name: '홍길동' },
+//   cart: [
+//     { id: 100, name: '라면', price: 3000 },
+//     { id: 101, name: '컵라면', price: 2000 },
+//     { id: 200, name: '파', price: 5000 },
+//   ],
+// };
 const SampleSession = {
-  loginUser: { id: 1, name: 'Hong' },
-  cart: [
-    { id: 100, name: '라면', price: 3000 },
-    { id: 101, name: '컵라면', price: 2000 },
-    { id: 200, name: '파', price: 5000 },
-  ],
+  loginUser: null,
+  cart: [],
 };
 
-export type LoginUser = typeof SampleSession.loginUser;
+type LoginUser = { id: number; name: string };
 export type CartItem = { id: number; name: string; price: number };
 export type Session = { loginUser: LoginUser | null; cart: CartItem[] };
 
 const contextInitValue = {
   session: SampleSession,
-  login: (id: number, name: string) => console.log(id, name),
   logout: () => {},
-  removeCartItem: (toRemoveId: number) => console.log(toRemoveId),
+  login: (id: number, name: string) => {
+    console.log(id, name);
+  },
+  removeCartItem: (id: number) => console.log(id),
   addCartItem: (name: string, price: number) => console.log(name, price),
   editCartItem: (item: CartItem) => console.log(item),
   loginRef: createRef<LoginHandler>(),
+  toggleReloadSession: () => {},
 };
+
 type SessionContextProps = Omit<typeof contextInitValue, 'session'> & {
   session: Session;
 };
+
 const SessionContext = createContext<SessionContextProps>(contextInitValue);
 
 export const SessionProvider = ({ children }: PropsWithChildren) => {
   const [session, setSession] = useState<Session>(SampleSession);
+  const [reloadSession, toggleReloadSession] = useToggle();
 
-  const logout = () => setSession({ ...session, loginUser: null });
+  const data =
+    useFetch<Session>('/data/sample.json', true, [reloadSession]) ||
+    SampleSession;
+  // console.log('🚀  data:', data);
+  useLayoutEffect(() => {
+    setSession(data);
+  }, [data]);
 
   const loginRef = useRef<LoginHandler>(null);
+
+  const logout = () => setSession({ ...session, loginUser: null });
 
   const login = (id: number, name: string) => {
     if (!id) {
@@ -53,7 +74,7 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
       alert('Name을 입력하세요!');
       return loginRef.current?.focus('name');
     }
-    if (!id || !name) return alert('No ID or Name');
+
     setSession({
       ...session,
       loginUser: { id, name },
@@ -85,12 +106,13 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
     <SessionContext.Provider
       value={{
         session,
-        login,
         logout,
+        login,
         removeCartItem,
         addCartItem,
         editCartItem,
         loginRef,
+        toggleReloadSession,
       }}
     >
       {children}
