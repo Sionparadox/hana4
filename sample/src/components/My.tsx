@@ -1,4 +1,3 @@
-import { FaPlus } from 'react-icons/fa6';
 import Login from './Login.tsx';
 import Profile from './Profile.tsx';
 import Button from './atoms/Button.tsx';
@@ -12,7 +11,7 @@ export default function My() {
   const { session, toggleReloadSession } = useSession();
   const logoutButtonRef = useRef<HTMLButtonElement>(null);
 
-  const [isAdding, toggleAdding] = useToggle(true);
+  const [isAdding, toggleAdding] = useToggle(false);
 
   let xxx = 0;
   useTimeout(() => {
@@ -49,9 +48,7 @@ export default function My() {
               toggleAdding={() => toggleAdding()}
             />
           ) : (
-            <Button onClick={toggleAdding}>
-              <FaPlus /> Add Item
-            </Button>
+            <Button onClick={toggleAdding}>+ Add Item</Button>
           )}
         </li>
       </ul>
