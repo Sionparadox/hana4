@@ -2,11 +2,22 @@ import { useRef, useState } from 'react';
 import Hello, { MyHandler } from './components/Hello';
 import My from './components/My';
 import { SessionProvider } from './hooks/session-context';
-// import { useCounter } from './hooks/counter-hook';
+import { useDebounce } from './hooks/timer-hooks';
+import useToggle from './hooks/toggle';
 
 function App() {
   const [friend, setFriend] = useState(10);
+  const [, toggleRerender] = useToggle();
   const myHandleRef = useRef<MyHandler>(null);
+  const friendRef = useRef<HTMLInputElement>(null);
+
+  useDebounce(
+    () => {
+      setFriend(+(friendRef.current?.value || 0));
+    },
+    1000,
+    [friendRef.current?.value]
+  );
 
   return (
     <div className='flex flex-col items-center'>
@@ -16,7 +27,8 @@ function App() {
           <input
             type='number'
             defaultValue={friend}
-            onChange={(e) => setFriend(+e.currentTarget.value)}
+            onChange={toggleRerender}
+            ref={friendRef}
             placeholder='friend'
             className='inp'
           ></input>

@@ -31,7 +31,10 @@ export const useFetch = <T>(
 
     (async function () {
       try {
-        if (isCache && url in cache) setResult(cache[url] as T);
+        if (isCache && url in cache) {
+          setError(undefined);
+          setResult(cache[url] as T);
+        }
         setLoading(true);
         const data = (await fetch(url, { signal }).then((res) => {
           if (res.ok) return res.json();

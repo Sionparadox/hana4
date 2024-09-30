@@ -1,7 +1,7 @@
 import Login from './Login.tsx';
 import Profile from './Profile.tsx';
 import Button from './atoms/Button.tsx';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useSession } from '../hooks/session-context.tsx';
 import Item from './Item.tsx';
 import useToggle from '../hooks/toggle.ts';
@@ -24,10 +24,6 @@ export default function My() {
     () => totalPrice * (1 - SALEPERCENT / 100),
     [totalPrice]
   );
-
-  useEffect(() => {
-    console.log('EFFECT');
-  }, [totalPrice]);
 
   let xxx = 0;
   useTimeout(() => {

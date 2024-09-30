@@ -1,31 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-// export const useTimeout = <T extends (...args: Parameters<T>) => ReturnType<T>>(
-//   cb: T,
-//   delay: number,
-//   ...args: Parameters<T>
-// ) => {
-//   const cbRef = useRef(cb);
-//   const argsRef = useRef(args);
-//   const timerRef = useRef<ReturnType<typeof setTimeout>>();
-
-//   const setup = useCallback(() => {
-//     timerRef.current = setTimeout(cbRef.current, delay, ...argsRef.current);
-//   }, [delay]);
-//   const clear = useCallback(() => clearTimeout(timerRef.current), []);
-//   const reset = useCallback(() => {
-//     clear();
-//     setup();
-//   }, [clear, setup]);
-
-//   useEffect(() => {
-//     setup();
-
-//     return clear;
-//   }, [setup, clear]);
-//   return { reset, clear };
-// };
-
 type TimerFn = typeof setTimeout | typeof setInterval;
 type ClearFn = typeof clearTimeout | typeof clearInterval;
 
@@ -65,3 +39,23 @@ export const useInterval = useTimer.bind({
   timerFn: setInterval,
   clearFn: clearInterval,
 });
+
+export const useDebounce = <T extends (...args: unknown[]) => ReturnType<T>>(
+  cb: T,
+  delay: number,
+  depArr: unknown[] = []
+) => {
+  const { reset } = useTimeout(cb, delay);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(reset, [...depArr, delay]);
+};
+
+//debounce complete(no type)
+// export const useDebounce = (
+//   cb: (...args: unknown[]) => void,
+//   delay: number,
+//   ...args: unknown[]
+// ) => {
+//   const { reset } = useTimeout(cb, delay, ...args);
+//   return reset;
+// };
