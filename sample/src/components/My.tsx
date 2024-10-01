@@ -39,7 +39,6 @@ export default function My() {
 
   useDebounce(
     () => {
-      console.log('useDebounce.search>>', searchRef.current?.value);
       setSearchstr(searchRef.current?.value || '');
     },
     1000,
