@@ -49,13 +49,3 @@ export const useDebounce = <T extends (...args: unknown[]) => ReturnType<T>>(
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(reset, [...depArr, delay]);
 };
-
-//debounce complete(no type)
-// export const useDebounce = (
-//   cb: (...args: unknown[]) => void,
-//   delay: number,
-//   ...args: unknown[]
-// ) => {
-//   const { reset } = useTimeout(cb, delay, ...args);
-//   return reset;
-// };

@@ -1,23 +1,30 @@
 import Login from './Login.tsx';
 import Profile from './Profile.tsx';
 import Button from './atoms/Button.tsx';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useSession } from '../hooks/session-context.tsx';
 import Item from './Item.tsx';
 import useToggle from '../hooks/toggle.ts';
-import { useTimeout } from '../hooks/timer-hooks.ts';
+import { useDebounce, useTimeout } from '../hooks/timer-hooks.ts';
+import { FaSearch } from 'react-icons/fa';
 
 const SALEPERCENT = 10;
 
 export default function My() {
   const { session, toggleReloadSession } = useSession();
   const logoutButtonRef = useRef<HTMLButtonElement>(null);
-
   const [isAdding, toggleAdding] = useToggle(false);
 
+  const [, toggleSearch] = useToggle();
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [searchstr, setSearchstr] = useState('');
+
   const totalPrice = useMemo(
-    () => session.cart.reduce((acc, item) => acc + item.price, 0),
-    [session.cart]
+    () =>
+      session.cart
+        .filter(({ name }) => name.includes(searchstr))
+        .reduce((acc, item) => acc + item.price, 0),
+    [session.cart, searchstr]
   );
 
   const dcPrice = useMemo(
@@ -29,6 +36,15 @@ export default function My() {
   useTimeout(() => {
     xxx++;
   }, 1000);
+
+  useDebounce(
+    () => {
+      console.log('useDebounce.search>>', searchRef.current?.value);
+      setSearchstr(searchRef.current?.value || '');
+    },
+    1000,
+    [searchRef.current?.value]
+  );
 
   return (
     <>
@@ -42,28 +58,42 @@ export default function My() {
       ) : (
         <Login />
       )}
-
-      <ul className='mt-3 w-2/3 border p-3'>
-        {session.cart?.length ? (
-          session.cart.map((item) => (
-            <li key={item.id}>
-              <Item item={item} />
-            </li>
-          ))
-        ) : (
-          <li className='text-slate-500'>There is no items.</li>
-        )}
-        <li className='mt-3 text-center'>
-          {isAdding ? (
-            <Item
-              item={{ id: 0, name: '', price: 0 }}
-              toggleAdding={() => toggleAdding()}
-            />
+      <div className='w-2/3 border p-3'>
+        <div className='flex items-center gap-2'>
+          <FaSearch />
+          <input
+            // onChange={(e) => setSearchstr(e.currentTarget.value)}
+            onChange={toggleSearch}
+            ref={searchRef}
+            type='text'
+            placeholder='아이템명 검색...'
+            className='inp'
+          />
+        </div>
+        <ul className='mt-3 px-3'>
+          {session.cart?.length ? (
+            session.cart
+              .filter(({ name }) => name.includes(searchstr))
+              .map((item) => (
+                <li key={item.id}>
+                  <Item item={item} />
+                </li>
+              ))
           ) : (
-            <Button onClick={toggleAdding}>+ Add Item</Button>
+            <li className='text-slate-500'>There is no items.</li>
           )}
-        </li>
-      </ul>
+          <li className='mt-3 text-center'>
+            {isAdding ? (
+              <Item
+                item={{ id: 0, name: '', price: 0 }}
+                toggleAdding={() => toggleAdding()}
+              />
+            ) : (
+              <Button onClick={toggleAdding}>+ Add Item</Button>
+            )}
+          </li>
+        </ul>
+      </div>
       <div className='md-3 flex gap-5'>
         <span>*총액 : {totalPrice.toLocaleString()}원</span>
         <span>*할인 : {dcPrice.toFixed(0).toLocaleString()}원</span>
