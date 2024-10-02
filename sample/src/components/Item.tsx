@@ -1,16 +1,20 @@
+import { FaTrashCan } from 'react-icons/fa6';
+import { useSession, type CartItem } from '../hooks/session-context';
 import { FormEvent, MouseEvent, useRef, useState } from 'react';
-import { CartItem, useSession } from '../hooks/session-context';
+import { useCounter } from '../hooks/counter-hook';
 import Button from './atoms/Button';
 import { FaRedo, FaSave } from 'react-icons/fa';
-import { FaTrashCan } from 'react-icons/fa6';
 
 type Props = {
   item: CartItem;
-  toggleAdding?: () => void;
+  toggleAdding?: () => void; // add시에만 저달할 것!!
 };
+
 export default function Item({ item, toggleAdding }: Props) {
   const { id, name, price } = item;
-  const { addCartItem, removeCartItem, editCartItem } = useSession();
+
+  const { removeCartItem, addCartItem, editCartItem } = useSession();
+  const { plusCount } = useCounter();
 
   const [isEditing, setIsEditing] = useState(!id);
   const [hasDirty, setDirty] = useState(false);
@@ -18,15 +22,24 @@ export default function Item({ item, toggleAdding }: Props) {
   const nameRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
 
-  const toggleEditing = () => {
+  const toggleEditing = (
+    e?: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>
+  ) => {
+    // if (e && 'preventDefault' in e)
+    e?.preventDefault();
     if (hasDirty && nameRef.current && priceRef.current) {
       nameRef.current.value = name;
       priceRef.current.value = String(price);
+      // setDirty(false);
       checkDirty();
     }
 
+    // setTimeout(() => {
     if (toggleAdding) toggleAdding();
     else setIsEditing((pre) => !pre);
+    // }, 500);
+
+    plusCount();
   };
 
   const removeItem = (e: MouseEvent<HTMLButtonElement>, id: number) => {
@@ -40,6 +53,7 @@ export default function Item({ item, toggleAdding }: Props) {
     e.preventDefault();
     const name = nameRef.current?.value;
     const price = priceRef.current?.value;
+    // console.log('🚀  name/price:', name, price);
     if (!name) {
       alert('상품명을 입력하세요!');
       return nameRef.current?.focus();
@@ -47,6 +61,7 @@ export default function Item({ item, toggleAdding }: Props) {
       alert('금액을 입력하세요!');
       return priceRef.current?.focus();
     }
+
     if (id === 0) addCartItem(name, +price);
     else editCartItem({ id, name, price: +price });
 
@@ -60,13 +75,21 @@ export default function Item({ item, toggleAdding }: Props) {
   const checkDirty = () => {
     const currName = nameRef.current?.value;
     const currPrice = Number(priceRef.current?.value);
-    setDirty(name != currName || price !== currPrice);
+    setDirty(name !== currName || price !== currPrice);
   };
+
+  // useLayoutEffect(() => {
+  //   sddaadsffsa
+
+  //   return () => { }
+  // }, [y]);
+  // useEffect(() => {}, [x, y]);
 
   return (
     <>
       {isEditing ? (
         <form onSubmit={saveItem} className='mt-3 flex gap-3'>
+          <small className='text-gray-300'>{id}</small>
           <input
             ref={nameRef}
             type='text'
@@ -86,22 +109,20 @@ export default function Item({ item, toggleAdding }: Props) {
           <Button type='reset' onClick={toggleEditing}>
             <FaRedo />
           </Button>
-          {hasDirty ? (
-            <Button type='submit' variant='btn-primary' className='m-0 py-1'>
+          {hasDirty && (
+            <Button type='submit' variant='btn-primary'>
               <FaSave />
             </Button>
-          ) : (
-            <div className='w-20'></div>
           )}
         </form>
       ) : (
         <a
           href='#'
-          onClick={toggleEditing}
+          onClick={() => toggleEditing()}
           className='group flex justify-between hover:bg-gray-200'
         >
           <strong className='group-hover:text-blue-500'>
-            {name}
+            <small className='text-gray-200'>{id}</small> {name}
             <small className='ml-2 font-light text-gray-500 group-hover:text-gray-100'>
               {price.toLocaleString()}원
             </small>
