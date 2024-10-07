@@ -15,6 +15,7 @@ import { useMyReducer, useMyState } from '../libs/my-uses';
 import Button from './atoms/Button';
 import useToggle from '../hooks/toggle';
 import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 type TitleProps = {
   text: string;
@@ -39,23 +40,8 @@ const Body = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// function useState<S>(initValueOrFn) {
-//   const state = {
-//     _state: initValueOrFn,
-//     get state() {
-//       return this._state;
-//     },
-//     setState(x: S) {
-//       this._state = x;
-//       vdom.trigger(this);
-//     }
-//   }
-
-//   return [state.state, state.setState];
-// }
-
 type Props = {
-  friend: number;
+  friend?: number;
 };
 
 export type MyHandler = {
@@ -69,16 +55,15 @@ type PlaceUser = {
   email: string;
 };
 
-function Hello({ friend }: Props, ref: ForwardedRef<MyHandler>) {
-  // const [myState, setMyState] = useState(() => new Date().getTime());
+function Hello({ friend = 10 }: Props, ref: ForwardedRef<MyHandler>) {
   const {
     session: { loginUser },
   } = useSession();
   const { count, plusCount, minusCount } = useCounter();
 
   const [isPStrong, togglePStrong] = useToggle(false);
-  const [p, dispatchP] = useReducer((pre) => pre + 10, 0);
-  const [q, dispatchQ] = useMyReducer((pre) => pre + 10, 0);
+  const [p, dispatchP] = useReducer((pre) => pre + 1, 0);
+  const [q, dispatchQ] = useMyReducer((pre) => pre + 1, 0);
   // const [myState, setMyState] = useState(0);
   const [myState, setMyState] = useMyState(0);
   let v = 1;
@@ -102,14 +87,17 @@ function Hello({ friend }: Props, ref: ForwardedRef<MyHandler>) {
   );
 
   return (
-    <div className='bg-blackx text-whitex my-1 w-4/5 border border-slate-300 p-3 text-center'>
+    <div className='bg-blackx text-whitex my-1 w-full border border-slate-300 p-3 text-center'>
       <div className='flex justify-around'>
         <Title text='Hello~' name={loginUser?.name} />
-        <span className={clsx('text-xl', isPStrong && 'text-blue-500')}>
+        <span className={clsx('text-4xl', isPStrong && 'text-blue-500')}>
           p: {p}
         </span>
         <span
-          className={clsx({ 'text-xl': true, 'text-blue-500': !isPStrong })}
+          className={clsx({
+            [twMerge(`pr-5 px-${q} pl-${q + 1} text-${q}xl`)]: true,
+            'text-blue-500': !isPStrong,
+          })}
         >
           q: {q}
         </span>
@@ -123,7 +111,7 @@ function Hello({ friend }: Props, ref: ForwardedRef<MyHandler>) {
         </Button>
         <Button
           onClick={() => {
-            dispatchQ(null);
+            dispatchQ();
             togglePStrong(false);
           }}
         >

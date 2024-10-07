@@ -5,6 +5,14 @@ import { SessionProvider } from './hooks/session-context';
 import { useDebounce } from './hooks/timer-hooks';
 import useToggle from './hooks/toggle';
 import Button from './components/atoms/Button';
+import Nav from './Nav';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import Login from './components/Login';
+import { NotFound } from './NotFound';
+import Home from './Home';
+import Items from './components/Items';
+import ItemDetail from './components/ItemDetail';
+import ItemLayout from './components/ItemLayout';
 // import { useInterval } from './hooks/timer-hooks';
 // import Button from './components/atoms/Button';
 // import { useCounter } from './hooks/counter-hook';
@@ -48,6 +56,9 @@ function App() {
   );
 
   // const { reset, clear } = useInterval(() => depArr((pre) => pre + 1), 1000);
+  useLocation();
+  const { pathname } = location;
+  console.log(`🚀 ~ App ~ pathname:`, pathname);
 
   return (
     <div className='flex flex-col items-center'>
@@ -57,27 +68,58 @@ function App() {
         <Button onClick={clear}>Clear</Button>
       </div> */}
 
-      <div className='flex gap-2'>
+      <SessionProvider>
+        <Nav />
+        <div className='mt-9'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/my' element={<My />} />
+            <Route path='/items' element={<ItemLayout />}>
+              <Route index element={<Items />} />
+              <Route path=':id' element={<ItemDetail />} />
+            </Route>
+
+            <Route
+              path='/hello'
+              element={
+                <Hello
+                  friend={+(friendRef.current?.value || 0)}
+                  ref={myHandleRef}
+                />
+              }
+            />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </div>
+        {pathname === '/hello' ? (
+          <div className='mt-3 flex w-full items-center justify-center px-5'>
+            <label htmlFor='friendid' className='w-64'>
+              Hello FriendID:
+            </label>
+            <input
+              id='friendid'
+              type='number'
+              defaultValue={friend}
+              // onChange={(e) => setFriend(+e.currentTarget.value)}
+              onChange={toggleReRender}
+              ref={friendRef}
+              placeholder='friend id...'
+              className='inp ml-3'
+            />
+          </div>
+        ) : (
+          <></>
+        )}
+        {/* <Hello friend={friend} ref={myHandleRef} />
+        <hr />
+        <My /> */}
+      </SessionProvider>
+
+      <div className='mt-10 flex gap-2'>
         <MemoedColorTitle color='white' backgroundColor={color} />
         <Button onClick={changeColor}>ChangeColor</Button>
       </div>
-
-      <SessionProvider>
-        <div className='mt-3 w-64'>
-          <input
-            type='number'
-            defaultValue={friend}
-            // onChange={(e) => setFriend(+e.currentTarget.value)}
-            onChange={toggleReRender}
-            ref={friendRef}
-            placeholder='friend id...'
-            className='inp'
-          />
-        </div>
-        <Hello friend={friend} ref={myHandleRef} />
-        <hr />
-        <My />
-      </SessionProvider>
 
       {/* <div className='card'>
         <button

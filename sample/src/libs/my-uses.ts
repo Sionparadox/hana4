@@ -52,7 +52,7 @@ export const useMyReducer = <R extends (pre: S, action: any) => S, S>(
 
   const dispatch = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (action: any) => {
+    (action?: any) => {
       setState((pre) => reducer(pre, action));
     },
     [reducer]

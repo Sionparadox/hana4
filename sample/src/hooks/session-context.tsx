@@ -101,18 +101,13 @@ const reducer = (session: Session, { type, payload }: Action) => {
 const SessionContext = createContext<SessionContextProps>(contextInitValue);
 
 export const SessionProvider = ({ children }: PropsWithChildren) => {
-  // const [session, setSession] = useState<Session>(SampleSession);
-  // const [session, dispatch] = useReducer(reducer, SampleSession);
   const [session, dispatch] = useMyReducer(reducer, SampleSession);
   const [reloadSession, toggleReloadSession] = useToggle();
 
   const { data } = useFetch<Session>('/data/sample.json', true, [
     reloadSession,
   ]);
-  // console.log('🚀  data:', data);
   useLayoutEffect(() => {
-    // setSession(data || SampleSession);
-
     const loginUser = JSON.parse(
       sessionStorage.getItem(SKEY) || 'null'
     ) as LoginUser;
@@ -129,7 +124,6 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
 
   const loginRef = useRef<LoginHandler>(null);
 
-  // const logout = () => setSession({ ...session, loginUser: null });
   const logout = () => {
     dispatch({ type: 'logout', payload: null });
     sessionStorage.removeItem(SKEY);
@@ -147,11 +141,6 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
       return loginRef.current?.focus('name');
     }
 
-    // setSession({
-    //   ...session,
-    //   loginUser: { id, name },
-    // });
-
     sessionStorage.setItem(SKEY, JSON.stringify({ id, name }));
 
     dispatch({ type: 'login', payload: { id, name } });
@@ -159,7 +148,6 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
 
   const addCartItem = (name: string, price: number) => {
     const id = Math.max(...session.cart.map(({ id }) => id), 0) + 1;
-    // setSession({ ...session, cart: [...session.cart, { id, name, price }] });
     dispatch({ type: 'addCartItem', payload: { id, name, price } });
   };
 
