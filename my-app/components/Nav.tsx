@@ -3,8 +3,10 @@ export default function Nav() {
     <nav className='flex justify-around shadow mb-3'>
       <a href='/'>Home</a>
       <a href='/hello'>Hello</a>
-      <a href='/about'>About</a>
       <a href='/hi'>Hi</a>
+      <a href='/shop'>Shop</a>
+      <a href='/parallel'>Parallel</a>
+      <a href='/about'>About</a>
     </nav>
   );
 }
