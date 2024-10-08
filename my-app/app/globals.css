@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  a {
+    font-weight: 500;
+    color: theme('colors.blue.400');
+    text-decoration: inherit;
+  }
+  a:hover {
+    color: inherit;
+  }
+
+  nav a:hover {
+    text-decoration: underline;
+  }
+  nav a.active:hover {
+    color: white;
+    text-decoration: none;
+    cursor: default;
+  }
+
+  input.inp {
+    @apply w-full rounded-md border px-2 py-1 focus:border-blue-500 focus:outline-none focus:ring-0;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
