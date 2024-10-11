@@ -11,7 +11,7 @@ export default function Books() {
 
   useLayoutEffect(() => {
     (async function () {
-      const books = (await fetch('http://localhost:3000/api/books').then(
+      const books = (await fetch(`${process.env.BASE_URL}/api/books`).then(
         (res) => res.json()
       )) as Book[];
       setBooks(books);
