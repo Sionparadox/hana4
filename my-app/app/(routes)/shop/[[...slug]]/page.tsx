@@ -1,6 +1,8 @@
 type Params = {
-  params: { slug: string[] };
+  params: {
+    slug: string[];
+  };
 };
 export default function ShopSlug({ params: { slug } }: Params) {
-  return <>SLUG : {JSON.stringify(slug)}</>;
+  return <>Slug: {JSON.stringify(slug)}</>;
 }

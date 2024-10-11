@@ -1,3 +1,3 @@
 export default function Morning() {
-  return <>Good Morning!</>;
+  return <>Good Morning~</>;
 }

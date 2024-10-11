@@ -1,3 +1,3 @@
 export default function About() {
-  return <>About Page : {new Date().toTimeString()}</>;
+  return <>About Page: {new Date().toTimeString()}</>;
 }

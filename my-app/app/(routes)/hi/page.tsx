@@ -1,8 +1,3 @@
-type Params = {
-  params: {
-    time: string;
-  };
-};
-export default function Hi({ params: { time } }: Params) {
-  return <>Hi!</>;
+export default function Hi() {
+  return <>Hi~</>;
 }

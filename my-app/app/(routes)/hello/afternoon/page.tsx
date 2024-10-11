@@ -1,3 +1,3 @@
 export default function Afternoon() {
-  return <>Good Afternoon!</>;
+  return <>Good Afternoon~</>;
 }

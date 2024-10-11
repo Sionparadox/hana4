@@ -1,3 +1,3 @@
 export default function Ic1_intercept() {
-  return <>IC1 - INTERCEPT</>;
+  return <>IC1 - Intercept</>;
 }

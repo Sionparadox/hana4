@@ -8,8 +8,8 @@ type Params = {
 export default function Time({ params: { time, cmt } }: Params) {
   return (
     <div className='capitalize'>
-      Good {time}! - Comment:
-      <span className='normal-case'>{cmt}</span>
+      Good {time}! - comment:
+      <span className='text-red-500 font-bold'>{cmt}</span>
     </div>
   );
 }
