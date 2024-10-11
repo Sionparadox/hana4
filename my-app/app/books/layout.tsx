@@ -7,12 +7,11 @@ import { type Book } from '../api/books/bookdata';
 
 export default function BooksLayout({ children }: { children: ReactNode }) {
   // const [books, setBooks] = useState<Book[]>([]);
-
   const {
     data: books,
     isLoading,
     error,
-  } = useFetch<Book[]>(`${process.env.BASE_URL}/api/books`);
+  } = useFetch<Book[]>(`${process.env.NEXT_PUBLIC_URL}/api/books`);
 
   if (error) {
     return <div className='text-red-500'>{error.message}</div>;
