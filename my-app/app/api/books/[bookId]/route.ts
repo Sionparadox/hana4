@@ -1,6 +1,6 @@
-import { getBook } from '@/actions/books';
+import { getBook, save } from '@/actions/books';
 import { notFound } from 'next/navigation';
-import { books } from '../bookdata';
+import { Book, books } from '../bookdata';
 
 type Params = {
   params: { bookId: string };
@@ -9,6 +9,14 @@ type Params = {
 export function GET(req: Request, { params: { bookId } }: Params) {
   const book = getBook(+bookId);
   if (!book) return notFound();
+
+  return Response.json(book);
+}
+
+export async function PATCH(req: Request, { params: { bookId } }: Params) {
+  const { title, writer } = (await req.json()) as Book;
+
+  const book = save(+bookId, title, writer);
 
   return Response.json(book);
 }

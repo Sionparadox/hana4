@@ -10,7 +10,7 @@ export default function Books() {
   const [searchStr, setSearchStr] = useState('');
 
   const { data: books } = useFetch<Book[]>(
-    `${process.env.NEXT_PUBLIC_URL}/api/books`
+    `${process.env.NEXT_PUBLIC_URL}/api/books?q=222`
   );
 
   return (

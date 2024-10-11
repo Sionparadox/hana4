@@ -1,6 +1,7 @@
 import { getBook } from '@/actions/books';
 import { type Book } from '@/app/api/books/bookdata';
 import { PencilIcon } from 'lucide-react';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import DelBook from '@/components/DelBook';
 import { Button } from '@/components/ui/button';
@@ -36,10 +37,12 @@ export default async function Book({
       </div>
 
       <div className='text-right space-x-4'>
-        <DelBook id={1} />
-        <Button variant={'outline'}>
-          <PencilIcon /> Edit
-        </Button>
+        <DelBook id={+bookId} />
+        <Link href={`/books/${bookId}/edit`}>
+          <Button variant={'outline'}>
+            <PencilIcon /> Edit
+          </Button>
+        </Link>
       </div>
     </div>
   );

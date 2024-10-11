@@ -1,6 +1,7 @@
 'use client';
 
 import { Trash2Icon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 
 type Props = {
@@ -9,6 +10,8 @@ type Props = {
 };
 
 export default function DelBook({ id }: Props) {
+  const router = useRouter();
+
   const remove = async () => {
     if (!confirm('Are u sure??')) return;
 
@@ -16,6 +19,7 @@ export default function DelBook({ id }: Props) {
       method: 'DELETE',
     }).then((res) => res.json());
     console.log('🚀  res:', res);
+    if (res.code === 200) router.push('/books');
   };
 
   return (

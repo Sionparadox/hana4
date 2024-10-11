@@ -3,6 +3,7 @@ import { books } from './bookdata';
 
 export function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
+  console.log('qqqqqq>>>', searchParams.get('q'));
   const searchStr = searchParams.get('searchStr');
   let rets = books;
 
