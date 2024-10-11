@@ -1,0 +1,25 @@
+@host=http://localhost:3000
+# @host=https://dev.mydomain.com
+# @host=https://mydomain.com
+
+### get books
+GET {{host}}/api/books
+
+### add book
+POST {{host}}/api/books
+
+{"title":"Sample Book","writer":"Jade"}
+
+### get a book
+GET {{host}}/api/books/1
+
+
+### update book
+PUT {{host}}/api/books/1
+# PATCH {{host}}/api/books/1
+
+### remove a book
+DELETE {{host}}/api/books/1
+
+### GET ttt
+GET {{host}}/api/ttt?q=111

@@ -12,7 +12,6 @@ export default function Photo({
     photoId: string;
   };
 }) {
-  console.log('hjkl');
   const [photo, setPhoto] = useState<Photo>();
   useLayoutEffect(() => {
     (async function () {
