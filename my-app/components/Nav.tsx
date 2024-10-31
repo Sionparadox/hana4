@@ -11,6 +11,7 @@ export default function Nav() {
       <a href='/photos'>Photos</a>
       <a href='/books'>Books</a>
       <a href='/about'>About</a>
+      <a href='/api/auth/signin'>SignIn</a>
     </nav>
   );
 }
